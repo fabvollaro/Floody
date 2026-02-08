@@ -4,13 +4,15 @@ Un'infrastruttura di comunicazione offline basata su Intelligenza Artificiale Lo
 
 >  **DISCLAIMER:** Questo è un progetto Proof-of-Concept (PoC). Non è (ancora) un sostituto certificato per i canali di emergenza ufficiali (112/118).
 
+Di seguito per l'applicazione dell'architettura verrà presa come esempio la città di Faenza, purtroppo già colpita molteplici volte da eventi climatici critici.
+
 ---
 
 ##  Obiettivo del Progetto
 
 Garantire che nessun cittadino rimanga isolato durante un'alluvione.
 Il sistema crea una **rete cittadina parallela** che permette di:
-1.  **Chattare con un'IA Medica Locale** per primo soccorso (senza internet).
+1.  **Chattare con un'IA Medica Locale** per primo soccorso.
 2.  **Inviare SOS** geolocalizzati alla Protezione Civile.
 3.  **Ricevere Bollettini Ufficiali** anti-panico.
 
@@ -29,7 +31,7 @@ Il sistema copre un'area di **215 km²** utilizzando una topologia ibrida Wi-Fi 
 ###  Livello 2: (Nodi di quartiere con IA)
 **Hardware:** Raspberry Pi 5 + Modulo LoRa + Pannello Solare.
 * **Ruolo:** Forniscono una rete Wi-Fi locale (`SOS_FAENZA`) ai cittadini. Eseguono un LLM (Llama 3) offline per rispondere a domande di emergenza.
-* **Posizioni Strategiche:** Borgo Durbecco, Ospedale, Stazione, PalaCattani.
+* **Posizioni Strategiche:** Borgo Durbecco, Ospedale, Stazione, PalaCattani, Zona Cappuccini, Centro Città.
 * **Copertura:** 150-200 metri (Wi-Fi) / 3-5 km (LoRa verso L1).
 
 ###  Livello 3: (Dispositivi dei cittadini)
@@ -39,17 +41,16 @@ Il sistema copre un'area di **215 km²** utilizzando una topologia ibrida Wi-Fi 
 
 ---
 
-## 🛠️ Hardware Requirements (BOM)
+## Hardware Requirements (BOM)
 
 ### Livello 2 (Nodo AI)
 | Componente | Specifiche | Note |
 | :--- | :--- | :--- |
-| **SBC** | Raspberry Pi 5 (8GB RAM) | Necessario per Llama 3.2 |
-| **Cooling** | Active Cooler | Fondamentale per non throttlare |
-| **Storage** | MicroSD 128GB A2 | High Endurance |
+| **SBC** | Raspberry Pi 5 (8GB RAM) | Compatibile con Llama 3.2 |
+| **Cooling** | Active Cooler | Fondamentale per non surriscaldare |
+| **Storage** | MicroSD 128GB A2 | Alta resistenza |
 | **Radio Interface** | Heltec V3 (via USB) | Bridge Meshtastic <-> Python |
-| **Power** | Batteria LiFePO4 12V 20Ah | + Pannello Solare 50W |
-| **Case** | IP67 Waterproof Box | Con pressacavi stagni |
+| **Power** | Batteria LiFePO4 12V 20Ah | Pannello Solare 50W |
 
 ### Livello 3 (Nodo Cittadino)
 * **Board:** Heltec V3 LoRa 868MHz (o TTGO T-Beam)
@@ -73,16 +74,3 @@ Il cuore del sistema gira su **Raspberry Pi OS (Bookworm)**.
     * Interfaccia Chat "WhatsApp-style".
 
 ---
-
-##  Quick Start (Installazione Nodo L2)
-
-### 1. Preparazione Raspberry Pi
-```bash
-# Aggiorna sistema
-sudo apt update && sudo apt upgrade -y
-
-# Installa Ollama
-curl -fsSL [https://ollama.com/install.sh](https://ollama.com/install.sh) | sh
-
-# Scarica il modello leggero
-ollama run llama3.2:3b
